@@ -17,4 +17,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
+# Install initctl_faker
+COPY ./initctl_faker.sh /initctl
+RUN chmod +x /initctl && rm -fr /sbin/initctl && ln -s /initctl /sbin/initctl
+
 CMD [ "ansible-playbook", "--version" ]

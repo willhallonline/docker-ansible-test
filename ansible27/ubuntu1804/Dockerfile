@@ -18,4 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
+# Install Ansible inventory file and initctl_faker
+COPY ./initctl_faker.sh /initctl
+RUN chmod +x /initctl && rm -fr /sbin/initctl && ln -s /initctl /sbin/initctl
+
 CMD [ "ansible-playbook", "--version" ]

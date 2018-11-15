@@ -15,4 +15,8 @@ LABEL maintainer="will@willhallonline.co.uk" \
 RUN yum -y install systemd && \
     yum clean all
 
+# Install Ansible inventory file and initctl_faker
+COPY ./initctl_faker.sh /initctl
+RUN chmod +x /initctl && rm -fr /sbin/initctl && ln -s /initctl /sbin/initctl
+
 CMD [ "ansible-playbook", "--version" ]
