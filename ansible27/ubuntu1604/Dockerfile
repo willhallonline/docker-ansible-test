@@ -18,7 +18,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-# Install Ansible inventory file and initctl_faker
+# Install initctl_faker and systemctl script
 COPY ./initctl_faker.sh /initctl
 COPY ./systemctl.py /usr/bin/systemctl
 
