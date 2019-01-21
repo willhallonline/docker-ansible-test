@@ -22,7 +22,9 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 COPY ./initctl_faker.sh /initctl
 COPY ./systemctl.py /usr/bin/systemctl
 
-RUN chmod +x /initctl && rm -fr /sbin/initctl && ln -s /initctl /sbin/initctl && \
+RUN chmod +x /initctl && \
+    rm -fr /sbin/initctl && \
+    ln -s /initctl /sbin/initctl && \
     chmod +x /usr/bin/systemctl
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
