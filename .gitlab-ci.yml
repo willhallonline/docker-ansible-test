@@ -27,8 +27,8 @@ build-centos:
 build-stretch:
   stage: build
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-stretch" ansible28/debian-stretch/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.7-stretch" ansible27/debian-stretch/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-stretch-slim" ansible28/debian-stretch-slim/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.7-stretch-slim" ansible27/debian-stretch-slim/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-stretch" ansible28/stretch/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.7-stretch" ansible27/stretch/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-stretch-slim" ansible28/stretch-slim/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.7-stretch-slim" ansible27/stretch-slim/
     - docker push "$CI_REGISTRY_IMAGE"
