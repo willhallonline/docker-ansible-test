@@ -12,8 +12,25 @@ LABEL maintainer="will@willhallonline.co.uk" \
     org.label-schema.vendor="Will Hall Online" \
     org.label-schema.docker.cmd="docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:2.7-centos"
 
-RUN yum -y install systemd && \
-    yum clean all
+# Install systemd -- See https://hub.docker.com/_/centos/
+RUN yum -y update; yum clean all; \
+    (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+    rm -f /lib/systemd/system/multi-user.target.wants/*;\
+    rm -f /etc/systemd/system/*.wants/*;\
+    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -f /lib/systemd/system/basic.target.wants/*;\
+    rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+# Install requirements.
+RUN yum makecache fast \
+    && yum -y install deltarpm epel-release initscripts \
+    && yum -y update \
+    && yum -y install \
+        sudo \
+        which \
+    && yum clean all
 
 # Install initctl_faker and systemctl script
 COPY ./initctl_faker.sh /initctl
