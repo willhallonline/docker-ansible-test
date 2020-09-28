@@ -1,4 +1,4 @@
-FROM willhallonline/ansible:2.7-ubuntu-16.04
+FROM willhallonline/ansible:2.9-ubuntu-20.04
 
 # Labels.
 LABEL maintainer="will@willhallonline.co.uk" \
@@ -10,11 +10,11 @@ LABEL maintainer="will@willhallonline.co.uk" \
     org.label-schema.url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vcs-url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vendor="Will Hall Online" \
-    org.label-schema.docker.cmd="docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:2.7-ubuntu-16.04"
+    org.label-schema.docker.cmd="docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:2.7-ubuntu-18.04"
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
-    apt-get install -y systemd systemd-cron rsyslog && \
+    apt-get install -y systemd && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
