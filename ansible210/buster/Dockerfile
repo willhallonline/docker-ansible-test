@@ -1,4 +1,4 @@
-FROM willhallonline/ansible:2.8-stretch-slim
+FROM willhallonline/ansible:2.10-buster
 
 # Labels.
 LABEL maintainer="will@willhallonline.co.uk" \
