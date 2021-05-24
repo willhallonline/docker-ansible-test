@@ -1,4 +1,4 @@
-FROM willhallonline/ansible:2.7-centos-7
+FROM willhallonline/ansible:2.9-centos-7
 
 # Labels.
 LABEL maintainer="will@willhallonline.co.uk" \

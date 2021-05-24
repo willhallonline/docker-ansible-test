@@ -8,23 +8,45 @@ services:
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 
-build-ubuntu:
+build-ubuntu-28:
   stage: build
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-16.04" ansible28/ubuntu1604/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-18.04" ansible28/ubuntu1804/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-20.04" ansible28/ubuntu2004/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-16.04" ansible27/ubuntu1604/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-18.04" ansible27/ubuntu1804/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-20.04" ansible28/ubuntu2004/
     - docker push "$CI_REGISTRY_IMAGE"
 
-build-centos:
+build-ubuntu-29:
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-16.04" ansible29/ubuntu1604/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-18.04" ansible29/ubuntu1804/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-20.04" ansible29/ubuntu2004/
+    - docker push "$CI_REGISTRY_IMAGE"
+
+#build-ubuntu-210:
+#  stage: build
+#  script:
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-16.04" ansible210/ubuntu1604/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-18.04" ansible210/ubuntu1804/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-20.04" ansible28/ubuntu2004/
+#    - docker push "$CI_REGISTRY_IMAGE"
+
+build-centos-7:
   stage: build
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-centos-7" ansible28/centos7/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-centos-7" ansible29/centos7/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-centos-7" ansible210/centos7/
     - docker push "$CI_REGISTRY_IMAGE"
+
+#build-centos-8:
+#  stage: build
+#  script:
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-centos-8" ansible28/centos7/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-centos-8" ansible29/centos7/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-centos-8" ansible210/centos7/
+#    - docker push "$CI_REGISTRY_IMAGE"
 
 build-stretch:
   stage: build
@@ -34,3 +56,12 @@ build-stretch:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-stretch-slim" ansible28/stretch-slim/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-stretch-slim" ansible29/stretch-slim/
     - docker push "$CI_REGISTRY_IMAGE"
+
+#build-buster:
+#  stage: build
+#  script:
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-buster" ansible28/stretch/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-buster" ansible29/stretch/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-buster-slim" ansible28/stretch-slim/
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-buster-slim" ansible29/stretch-slim/
+#    - docker push "$CI_REGISTRY_IMAGE"
