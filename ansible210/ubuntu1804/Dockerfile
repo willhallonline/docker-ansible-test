@@ -14,6 +14,7 @@ LABEL maintainer="will@willhallonline.co.uk" \
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
+    apt-get install -y tzdata && \
     apt-get install -y systemd && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
