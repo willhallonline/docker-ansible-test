@@ -8,27 +8,27 @@ services:
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 
-build-ubuntu-28:
+build-ubuntu-1604:
   stage: build
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-16.04" ansible28/ubuntu1604/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-18.04" ansible28/ubuntu1804/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-20.04" ansible28/ubuntu2004/
-    - docker push --all-tags "$CI_REGISTRY_IMAGE"
-
-build-ubuntu-29:
-  stage: build
-  script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-16.04" ansible29/ubuntu1604/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-18.04" ansible29/ubuntu1804/
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-20.04" ansible29/ubuntu2004/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-16.04" ansible210/ubuntu1604/
     - docker push --all-tags "$CI_REGISTRY_IMAGE"
 
-build-ubuntu-210:
+build-ubuntu-1804:
   stage: build
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-16.04" ansible210/ubuntu1604/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-18.04" ansible28/ubuntu1804/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-18.04" ansible29/ubuntu1804/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-18.04" ansible210/ubuntu1804/
+    - docker push --all-tags "$CI_REGISTRY_IMAGE"
+
+build-ubuntu-2004:
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.8-ubuntu-20.04" ansible28/ubuntu2004/
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:2.9-ubuntu-20.04" ansible29/ubuntu2004/
     - docker build --pull -t "$CI_REGISTRY_IMAGE:2.10-ubuntu-20.04" ansible210/ubuntu2004/
     - docker push --all-tags "$CI_REGISTRY_IMAGE"
 
