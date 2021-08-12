@@ -25,7 +25,7 @@ RUN dnf -y update; dnf clean all; \
 
 # Install requirements.
 RUN dnf -y update && \
-    dnf -y install deltarpm epel-release initscripts && \
+    dnf -y install epel-release initscripts && \
     dnf -y update && \
     dnf -y install \
         sudo \
