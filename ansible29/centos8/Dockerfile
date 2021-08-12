@@ -24,10 +24,10 @@ RUN dnf -y update; dnf clean all; \
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install requirements.
-RUN dnf makecache fast && \
+RUN dnf -y update && \
     dnf -y install deltarpm epel-release initscripts && \
     dnf -y update && \
-    dnf yum -y install \
+    dnf -y install \
         sudo \
         which  && \
     dnf clean all
