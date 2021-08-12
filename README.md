@@ -1,37 +1,46 @@
 # Ansible Testing
 
-This image is to test functionality of Ansible from within a container. It is aimed at being used only with CI tests of Ansible roles or playbooks.
+This image is to test the functionality of Ansible from within a container. It is aimed at being used only with CI tests of Ansible roles or playbooks.
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] [![](https://images.microbadger.com/badges/image/willhallonline/ansible-test.svg)](https://microbadger.com/images/willhallonline/ansible-test "Get your own image badge on microbadger.com") [![Docker Automated build](https://img.shields.io/docker/automated/willhallonline/ansible-test.svg)][hub] [![Docker Build Status](https://img.shields.io/docker/build/willhallonline/ansible-test.svg)][hub]
+[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] [![](https://images.microbadger.com/badges/image/willhallonline/ansible-test.svg)](https://microbadger.com/images/willhallonline/ansible-test)
 
 ## Supported tags and respective `Dockerfile` links
 
-### Ansible 2.8 (with Mitogen)
+### Ansible 2.10
 
-* `latest`, `ubuntu`, `2.8-ubuntu`, `ubuntu-18.04`, `2.8-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible28/ubuntu1804/Dockerfile)
-* `ubuntu-16.04`, `2.8-ubuntu-16.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible28/ubuntu1604/Dockerfile)
-* `centos`, `centos-7`, `2.8-centos`, `2.8-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible28/centos7/Dockerfile)
-* `stretch`, `2.8-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible28/stretch/Dockerfile)
-* `stretch-slim`, `2.8-stretch-slim` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible28/stretch-slim/Dockerfile)
+* `latest`, `2.10-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu2004/Dockerfile)
+* `2.10-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu1804/Dockerfile)
+* `2.10-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos7/Dockerfile)
+* `2.10-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos8/Dockerfile)
+* `2.10-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/stretch/Dockerfile)
+* `2.10-buster` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/buster/Dockerfile)
 
-### Ansible 2.7 (with Mitogen)
 
-* `2.7-ubuntu`, `ubuntu-18.04`, `2.7-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible27/ubuntu1804/Dockerfile)
-* `2.7-ubuntu-16.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible27/ubuntu1604/Dockerfile)
-* `2.7-centos`, `2.7-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible27/centos7/Dockerfile)
-* `2.7-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible27/stretch/Dockerfile)
-* `2.7-stretch-slim` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible27/stretch-slim/Dockerfile)
+### Ansible 2.9
 
-### Ansible 2.5 (with Mitogen)
+* `2.9-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu2004/Dockerfile)
+* `2.9-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu1804/Dockerfile)
+* `2.9-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos7/Dockerfile)
+* `2.9-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos8/Dockerfile)
+* `2.9-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/stretch/Dockerfile)
+* `2.9-buster` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/buster/Dockerfile)
 
-**Ansible 2.5 is end of life and therefore deprecated**
+## Using Mitogen
 
-## Mitogen
+To leverage *Mitogen* to accelerate your playbook runs, add this to your ```ansible.cfg```:
 
-To leverage *Mitogen* to accelerate your playbook runs, add this to your `ansible.cfg`:
+Please investigate in your container the location of `ansible_mitogen` (it is different per container). You can do this via:
 
+```bash
+your_container="ansible:latest"
+docker run --rm -it "willhallonline/${your_container}" /bin/sh -c "find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1"
 ```
-strategy_plugins = /usr/lib/python2.7/site-packages/ansible_mitogen/plugins/strategy
+
+and then configuring your own ansible.cfg like:
+
+```ini
+[defaults]
+strategy_plugins = /usr/local/lib/python3.7/site-packages/ansible_mitogen/plugins/
 strategy = mitogen_linear
 ```
 
@@ -42,19 +51,19 @@ strategy = mitogen_linear
 ### Simple
 
 ```
-$   docker run --rm -it willhallonline/ansible-test /bin/sh
+$   docker run --rm -it willhallonline/ansible-test:latest /bin/sh
 ```
 
 ### Mount local directory and ssh key
 
 ```
-$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:ubuntu /bin/sh
+$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:latest /bin/sh
 ```
 
 ### Injecting commands
 
 ```
-$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:ubuntu ansible-playbook playbook.yml
+$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:latest ansible-playbook playbook.yml
 ```
 
 ## Maintainer
