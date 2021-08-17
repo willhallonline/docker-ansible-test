@@ -17,7 +17,7 @@ This image is to test the functionality of Ansible from within a container. It i
 
 ### Ansible 2.9
 
-* `latest`, `2.9-ubuntu-18.04`, [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu1804/Dockerfile)
+* `2.9-ubuntu-18.04`, [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu1804/Dockerfile)
 * `2.9-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu2004/Dockerfile)
 * `2.9-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos7/Dockerfile)
 * `2.9-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos8/Dockerfile)
