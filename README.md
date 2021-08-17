@@ -1,15 +1,15 @@
 # Ansible Testing
 
-This image is to test functionality of Ansible from within a container. It is aimed at being used only with CI tests of Ansible roles or playbooks.
+This image is to test the functionality of Ansible from within a container. It is aimed at being used only with CI tests of Ansible roles or playbooks.
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] [![](https://images.microbadger.com/badges/image/willhallonline/ansible-test.svg)](https://microbadger.com/images/willhallonline/ansible-test "Get your own image badge on microbadger.com") [![Docker Automated build](https://img.shields.io/docker/automated/willhallonline/ansible-test.svg)][hub] [![Docker Build Status](https://img.shields.io/docker/build/willhallonline/ansible-test.svg)][hub]
+[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] [![](https://images.microbadger.com/badges/image/willhallonline/ansible-test.svg)](https://microbadger.com/images/willhallonline/ansible-test)
 
 ## Supported tags and respective `Dockerfile` links
 
 ### Ansible 2.10
 
 * `latest`, `2.10-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu2004/Dockerfile)
-* `2.10-ubuntu-18.04`, [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu1804/Dockerfile)
+* `2.10-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu1804/Dockerfile)
 * `2.10-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos7/Dockerfile)
 * `2.10-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos8/Dockerfile)
 * `2.10-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/stretch/Dockerfile)
@@ -50,7 +50,7 @@ strategy = mitogen_linear
 ### Simple
 
 ```
-$   docker run --rm -it willhallonline/ansible-test /bin/sh
+$   docker run --rm -it willhallonline/ansible-test:latest /bin/sh
 ```
 
 ### Mount local directory and ssh key
