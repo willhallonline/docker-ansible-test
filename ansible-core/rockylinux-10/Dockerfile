@@ -12,6 +12,14 @@ LABEL maintainer="will@willhallonline.co.uk" \
 
 RUN dnf -y install systemd systemd-libs dbus && \
     dnf clean all && \
+    pip3 install --no-cache-dir \
+        pycodestyle \
+        pytest \
+        pytest-mock \
+        yamllint \
+        rstcheck \
+        pathspec \
+        voluptuous && \
     # Remove unnecessary systemd services
     (cd /lib/systemd/system/sysinit.target.wants/ && \
         for i in *; do [ "$i" = "systemd-tmpfiles-setup.service" ] || rm -f "$i"; done) && \
