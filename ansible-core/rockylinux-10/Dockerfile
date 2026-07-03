@@ -25,4 +25,4 @@ RUN dnf -y install systemd systemd-libs dbus && \
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 STOPSIGNAL SIGRTMIN+3
-CMD ["/usr/sbin/init"]
+CMD ["/lib/systemd/systemd"]

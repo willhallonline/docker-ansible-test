@@ -1,73 +1,70 @@
 # Ansible Testing
 
-This image is to test the functionality of Ansible from within a container. It is aimed at being used only with CI tests of Ansible roles or playbooks.
+Ansible testing images with **systemd** enabled inside Docker containers. These images extend [willhallonline/ansible](https://github.com/willhallonline/docker-ansible) with systemd support, making them suitable for CI tests of Ansible roles or playbooks that manage services.
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] [![](https://images.microbadger.com/badges/image/willhallonline/ansible-test.svg)](https://microbadger.com/images/willhallonline/ansible-test)
+[![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test.svg)][hub] ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/willhallonline/ansible-test/latest)
 
 ## Supported tags and respective `Dockerfile` links
 
-### Ansible 2.10
+Tags follow the pattern: `<ansible-version>-<os>` (e.g. `2.21-debian-trixie`)
 
-* `latest`, `2.10-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu2004/Dockerfile)
-* `2.10-ubuntu-18.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/ubuntu1804/Dockerfile)
-* `2.10-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos7/Dockerfile)
-* `2.10-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/centos8/Dockerfile)
-* `2.10-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/stretch/Dockerfile)
-* `2.10-buster` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible210/buster/Dockerfile)
+### Ansible Core (2.16, 2.17, 2.18, 2.19, 2.20, 2.21)
 
-### Ansible 2.9
+| Base Image (↓) \ Ansible Version (→) | 2.21 | 2.20 | 2.19 | 2.18 | 2.17 | 2.16 |
+|---------------------------------------|------|------|------|------|------|------|
+| Debian Bookworm | | | `2.19-debian-bookworm` | `2.18-debian-bookworm` | `2.17-debian-bookworm` | `2.16-debian-bookworm` |
+| Debian Bookworm Slim | | | `2.19-debian-bookworm-slim` | `2.18-debian-bookworm-slim` | `2.17-debian-bookworm-slim` | `2.16-debian-bookworm-slim` |
+| Debian Trixie | `latest`, `2.21-debian-trixie` | `2.20-debian-trixie` | `2.19-debian-trixie` | `2.18-debian-trixie` | `2.17-debian-trixie` | |
+| Debian Trixie Slim | `2.21-debian-trixie-slim` | `2.20-debian-trixie-slim` | `2.19-debian-trixie-slim` | `2.18-debian-trixie-slim` | `2.17-debian-trixie-slim` | |
+| Rocky Linux 10 | `2.21-rockylinux-10` | `2.20-rockylinux-10` | `2.19-rockylinux-10` | `2.18-rockylinux-10` | `2.17-rockylinux-10` | `2.16-rockylinux-10` |
+| Ubuntu 22.04 | | | | | `2.17-ubuntu-22.04` | `2.16-ubuntu-22.04` |
+| Ubuntu 24.04 | `2.21-ubuntu-24.04` | `2.20-ubuntu-24.04` | `2.19-ubuntu-24.04` | `2.18-ubuntu-24.04` | `2.17-ubuntu-24.04` | `2.16-ubuntu-24.04` |
+| Ubuntu 26.04 | `2.21-ubuntu-26.04` | `2.20-ubuntu-26.04` | | | | |
 
-* `2.9-ubuntu-18.04`, [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu1804/Dockerfile)
-* `2.9-ubuntu-20.04` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/ubuntu2004/Dockerfile)
-* `2.9-centos-7` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos7/Dockerfile)
-* `2.9-centos-8` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/centos8/Dockerfile)
-* `2.9-stretch` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/stretch/Dockerfile)
-* `2.9-buster` [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible29/buster/Dockerfile)
-
-### Using Mitogen
-
-To leverage *Mitogen* to accelerate your playbook runs, add this to your ```ansible.cfg```:
-
-Please investigate in your container the location of `ansible_mitogen` (it is different per container). You can do this via:
-
-```bash
-your_container="ansible:latest"
-docker run --rm -it "willhallonline/${your_container}" /bin/sh -c "find / -type d | grep "ansible_mitogen/plugins" | sort | head -n 1"
-```
-
-and then configuring your own ansible.cfg like:
-
-```ini
-[defaults]
-strategy_plugins = /usr/local/lib/python3.7/site-packages/ansible_mitogen/plugins/
-strategy = mitogen_linear
-```
+> **Note:** Alpine images are not provided as Alpine uses OpenRC, not systemd.
 
 ## Running
 
-**You will likely need to mount required directories into your container to make it run (or build on top of what is here).**
+These containers run systemd as PID 1 and require `--privileged` or appropriate cgroup mounts.
 
-### Simple
+### Interactive shell
 
-```
-$   docker run --rm -it willhallonline/ansible-test:latest /bin/sh
-```
-
-### Mount local directory and ssh key
-
-```
-$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:latest /bin/sh
+```bash
+docker run --rm -it --privileged willhallonline/ansible-test:latest /bin/bash
 ```
 
-### Injecting commands
+### Testing an Ansible role
 
+```bash
+docker run --rm --privileged \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  -v $(pwd):/ansible \
+  willhallonline/ansible-test:2.21-debian-trixie \
+  ansible-playbook /ansible/playbook.yml
 ```
-$   docker run --rm -it -v $(pwd):/ansible -v ~/.ssh/id_rsa:/root/id_rsa willhallonline/ansible-test:latest ansible-playbook playbook.yml
+
+### CI usage (e.g. GitHub Actions)
+
+```yaml
+services:
+  target:
+    image: willhallonline/ansible-test:2.21-ubuntu-24.04
+    options: --privileged
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+```
+
+## Building locally
+
+```bash
+docker build \
+  --build-arg ANSIBLE_TAG=2.21-debian-trixie \
+  -t ansible-test:2.21-debian-trixie \
+  ansible-core/debian-trixie/
 ```
 
 ## Maintainer
 
-* Written and maintained by Will Hall (https://www.willhallonline.co.uk)
+* Written and maintained by [Will Hall](https://www.willhallonline.co.uk)
 
 [hub]: https://hub.docker.com/r/willhallonline/ansible-test
-[microbadger]: https://microbadger.com/images/willhallonline/ansible-test
