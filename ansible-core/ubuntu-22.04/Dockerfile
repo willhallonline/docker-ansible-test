@@ -17,6 +17,14 @@ RUN apt-get update && \
         dbus && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
+    pip3 install --no-cache-dir \
+        pycodestyle \
+        pytest \
+        pytest-mock \
+        yamllint \
+        rstcheck \
+        pathspec \
+        voluptuous && \
     # Remove unnecessary systemd services
     rm -f /lib/systemd/system/multi-user.target.wants/* && \
     rm -f /etc/systemd/system/*.wants/* && \
