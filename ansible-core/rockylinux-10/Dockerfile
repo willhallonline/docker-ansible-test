@@ -23,6 +23,16 @@ RUN dnf -y install systemd systemd-libs dbus && \
     rm -f /lib/systemd/system/basic.target.wants/* && \
     rm -f /lib/systemd/system/anaconda.target.wants/*
 
+# Install Python packages required for ansible-test sanity checks.
+RUN pip3 install --no-cache-dir \
+        pycodestyle \
+        pytest \
+        pytest-mock \
+        yamllint \
+        rstcheck \
+        pathspec \
+        voluptuous
+
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 STOPSIGNAL SIGRTMIN+3
 CMD ["/lib/systemd/systemd"]
