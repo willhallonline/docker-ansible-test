@@ -2,11 +2,13 @@
 
 Docker images with **systemd** enabled for testing Ansible roles and playbooks inside containers. These images extend [willhallonline/ansible](https://github.com/willhallonline/docker-ansible) with systemd support, making them ideal for CI/CD testing of roles that manage services or interact with the init system.
 
+**Version Alignment:** ansible-test versions track [docker-ansible](https://github.com/willhallonline/docker-ansible) releases. Both projects support the same Ansible Core versions (2.16–2.21) and base OS combinations.
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/willhallonline/ansible-test "Docker Pulls")][hub] ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/willhallonline/ansible-test/latest)
 
 ## Current Ansible Core Versions
 
-These are the latest Ansible Core versions running within the containers:
+These are the latest Ansible Core versions running within the containers. **Versions match [docker-ansible](https://github.com/willhallonline/docker-ansible):**
 
 - Ansible 2.16: 2.16.14
 - Ansible 2.17: 2.17.14
@@ -14,6 +16,8 @@ These are the latest Ansible Core versions running within the containers:
 - Ansible 2.19: 2.19.2
 - Ansible 2.20: 2.20.0
 - Ansible 2.21: 2.21.0
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and [docker-ansible CHANGELOG](https://github.com/willhallonline/docker-ansible/blob/main/CHANGELOG.md) for detailed release notes.
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -149,5 +153,8 @@ docker exec <container-id> ansible-playbook /ansible/playbook.yml
 ## Maintainer
 
 - Written and maintained by [Will Hall](https://www.willhallonline.co.uk)
+- Part of the [docker-ansible](https://github.com/willhallonline/docker-ansible) project family
+
+For contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 [hub]: https://hub.docker.com/r/willhallonline/ansible-test
