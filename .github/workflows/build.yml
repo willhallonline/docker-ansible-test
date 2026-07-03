@@ -1,0 +1,185 @@
+name: Ansible Test Matrix Build
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ansible-core/**/Dockerfile'
+      - '.github/workflows/build.yml'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'ansible-core/**/Dockerfile'
+      - '.github/workflows/build.yml'
+  schedule:
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
+
+env:
+  DOCKERHUB_NAMESPACE: willhallonline
+  DOCKERHUB_REPOSITORY: ansible-test
+  GITHUB_REGISTRY: ghcr.io
+  GITHUB_REGISTRY_REPOSITORY: ${{ github.repository }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: 'build (ansible-test:${{ matrix.tag-version }}-${{ matrix.os }})'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Debian Bookworm
+          - os: debian-bookworm
+            tag-version: "2.16"
+          - os: debian-bookworm
+            tag-version: "2.17"
+          - os: debian-bookworm
+            tag-version: "2.18"
+          - os: debian-bookworm
+            tag-version: "2.19"
+
+          # Debian Bookworm Slim
+          - os: debian-bookworm-slim
+            tag-version: "2.16"
+          - os: debian-bookworm-slim
+            tag-version: "2.17"
+          - os: debian-bookworm-slim
+            tag-version: "2.18"
+          - os: debian-bookworm-slim
+            tag-version: "2.19"
+
+          # Debian Trixie
+          - os: debian-trixie
+            tag-version: "2.17"
+          - os: debian-trixie
+            tag-version: "2.18"
+          - os: debian-trixie
+            tag-version: "2.19"
+          - os: debian-trixie
+            tag-version: "2.20"
+          - os: debian-trixie
+            tag-version: "2.21"
+
+          # Debian Trixie Slim
+          - os: debian-trixie-slim
+            tag-version: "2.17"
+          - os: debian-trixie-slim
+            tag-version: "2.18"
+          - os: debian-trixie-slim
+            tag-version: "2.19"
+          - os: debian-trixie-slim
+            tag-version: "2.20"
+          - os: debian-trixie-slim
+            tag-version: "2.21"
+
+          # Rocky Linux 10
+          - os: rockylinux-10
+            tag-version: "2.16"
+          - os: rockylinux-10
+            tag-version: "2.17"
+          - os: rockylinux-10
+            tag-version: "2.18"
+          - os: rockylinux-10
+            tag-version: "2.19"
+          - os: rockylinux-10
+            tag-version: "2.20"
+          - os: rockylinux-10
+            tag-version: "2.21"
+
+          # Ubuntu 22.04
+          - os: ubuntu-22.04
+            tag-version: "2.16"
+          - os: ubuntu-22.04
+            tag-version: "2.17"
+
+          # Ubuntu 24.04
+          - os: ubuntu-24.04
+            tag-version: "2.16"
+          - os: ubuntu-24.04
+            tag-version: "2.17"
+          - os: ubuntu-24.04
+            tag-version: "2.18"
+          - os: ubuntu-24.04
+            tag-version: "2.19"
+          - os: ubuntu-24.04
+            tag-version: "2.20"
+          - os: ubuntu-24.04
+            tag-version: "2.21"
+
+          # Ubuntu 26.04
+          - os: ubuntu-26.04
+            tag-version: "2.20"
+          - os: ubuntu-26.04
+            tag-version: "2.21"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Login to Docker Hub
+        if: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to the Github Container registry
+        if: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GITHUB_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPOSITORY }}
+            ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}
+          tags: |
+            type=raw,enable=true,value=${{ matrix.tag-version }}-${{ matrix.os }}
+            ${{ matrix.os == 'debian-trixie' && matrix.tag-version == '2.21' && 'type=raw,enable=true,value=latest' || '' }}
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./ansible-core/${{ matrix.os }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          build-args: |
+            ANSIBLE_TAG=${{ matrix.tag-version }}-${{ matrix.os }}
+
+      - name: Test docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: |
+          docker run --rm --privileged \
+            -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+            ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}:${{ matrix.tag-version }}-${{ matrix.os }} \
+            ansible-playbook --version
