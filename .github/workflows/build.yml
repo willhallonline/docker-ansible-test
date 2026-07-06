@@ -176,7 +176,7 @@ jobs:
             ANSIBLE_TAG=${{ matrix.tag-version }}-${{ matrix.os }}
 
       - name: Test docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' && steps.build.outputs.digest }}
         shell: bash
         run: |
           docker run --rm --privileged \
