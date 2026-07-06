@@ -17,7 +17,7 @@ RUN apt-get update && \
         dbus && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    pip3 install --no-cache-dir \
+    pip3 install --no-cache-dir --break-system-packages \
         pycodestyle \
         pytest \
         pytest-mock \
