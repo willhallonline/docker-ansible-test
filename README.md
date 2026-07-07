@@ -47,7 +47,7 @@ ARM (ARM64/ARMv7) releases are available for all container images.
 
 ## Running
 
-These containers run systemd as PID 1 and need a delegated cgroup hierarchy to function. You do **not** need `--privileged` on a modern host — see the [Security note](#security-note-avoid-privileged) below for why that flag should be a last resort.
+These containers run systemd as PID 1 and need a delegated cgroup hierarchy to function. You do **not** need `--privileged` on a modern host — see the [Security note](#security-note-avoid---privileged) below for why that flag should be a last resort.
 
 ### Interactive shell with systemd
 
@@ -155,7 +155,7 @@ docker build \
 
 ### Systemd Container Requirements
 
-- Containers need a delegated cgroup hierarchy (`--cgroupns=private` plus `-v /sys/fs/cgroup:/sys/fs/cgroup:rw`) — `--privileged` is not required on modern hosts; see the [Security note](#security-note-avoid-privileged) above
+- Containers need a delegated cgroup hierarchy (`--cgroupns=private` plus `-v /sys/fs/cgroup:/sys/fs/cgroup:rw`) — `--privileged` is not required on modern hosts; see the [Security note](#security-note-avoid---privileged) above
 - The container starts systemd as PID 1, allowing `service` and `systemctl` commands to work
 - Useful for testing roles that:
   - Enable/disable/start/stop services
