@@ -47,18 +47,24 @@ ARM (ARM64/ARMv7) releases are available for all container images.
 
 ## Running
 
-These containers run systemd as PID 1 and require either `--privileged` flag or explicit cgroup mounts to function properly.
+These containers run systemd as PID 1 and need a delegated cgroup hierarchy to function. You do **not** need `--privileged` on a modern host — see the [Security note](#security-note-avoid---privileged) below for why that flag should be a last resort.
 
 ### Interactive shell with systemd
 
 ```bash
-docker run --rm -it --privileged willhallonline/ansible-test:latest /bin/bash
+docker run --rm -it \
+  --cgroupns=private \
+  --tmpfs /run --tmpfs /run/lock \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
+  willhallonline/ansible-test:latest /bin/bash
 ```
 
 ### Testing an Ansible role (with systemd support)
 
 ```bash
-docker run --rm --privileged \
+docker run --rm \
+  --cgroupns=private \
+  --tmpfs /run --tmpfs /run/lock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   -v $(pwd):/ansible \
   willhallonline/ansible-test:2.21-debian-trixie \
@@ -73,7 +79,7 @@ docker run --rm --privileged \
 services:
   target:
     image: willhallonline/ansible-test:2.21-ubuntu-24.04
-    options: --privileged
+    options: --cgroupns=private
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
 ```
@@ -91,9 +97,12 @@ platforms:
   - name: instance
     image: willhallonline/ansible-test:2.21-debian-trixie
     pre_build_image: true
-    privileged: true
+    cgroupns_mode: private
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    tmpfs:
+      - /run
+      - /run/lock
     docker_networks:
       - name: ansible_test
 ```
@@ -103,9 +112,28 @@ platforms:
 You can put these inside your dotfiles (~/.bashrc or ~/.zshrc).
 
 ```bash
-alias docker-ansible-test='docker run --rm -it --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v $(pwd):/ansible willhallonline/ansible-test:latest /bin/bash'
-alias docker-ansible-test-play='docker run --rm --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v $(pwd):/ansible willhallonline/ansible-test:latest ansible-playbook'
+alias docker-ansible-test='docker run --rm -it --cgroupns=private --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v $(pwd):/ansible willhallonline/ansible-test:latest /bin/bash'
+alias docker-ansible-test-play='docker run --rm --cgroupns=private --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v $(pwd):/ansible willhallonline/ansible-test:latest ansible-playbook'
 ```
+
+### Security note: avoid `--privileged`
+
+`--privileged` grants the container **all** Linux capabilities, disables seccomp/AppArmor confinement, and exposes every host device node. A container running like this is effectively root on the host — a malicious or buggy Ansible role under test could mount the host disk, load kernel modules, or escape via the classic cgroup `release_agent` trick. Since this image is designed to run arbitrary, possibly untrusted, playbooks and roles, that's a real risk, not a theoretical one.
+
+Prefer, in order:
+
+1. **cgroup v2 + `--cgroupns=private`** (shown above) — works on any modern host (Docker 20.10+, cgroup v2 default on current Debian/Ubuntu/Fedora/RHEL/Rocky). No extra capabilities or relaxed seccomp needed; systemd is designed to run this way in containers.
+2. **Rootless Podman** (`podman run --systemd=always ...`) — Podman configures the systemd environment automatically and maps container root to an unprivileged host user.
+3. **cgroup v1 fallback** (older hosts only), granting just the capability systemd actually needs instead of everything:
+   ```bash
+   docker run --rm \
+     --cap-add SYS_ADMIN \
+     --security-opt seccomp=unconfined \
+     -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+     --tmpfs /run --tmpfs /run/lock \
+     willhallonline/ansible-test:latest
+   ```
+4. **`--privileged`** — only if none of the above work for your environment (e.g. an old CI runner you don't control). Treat any container run this way as equivalent to host root, and never use it to run untrusted playbooks.
 
 Use with:
 
@@ -127,7 +155,7 @@ docker build \
 
 ### Systemd Container Requirements
 
-- Containers must run with `--privileged` or explicit cgroup mounts (`-v /sys/fs/cgroup:/sys/fs/cgroup:rw`)
+- Containers need a delegated cgroup hierarchy (`--cgroupns=private` plus `-v /sys/fs/cgroup:/sys/fs/cgroup:rw`) — `--privileged` is not required on modern hosts; see the [Security note](#security-note-avoid---privileged) above
 - The container starts systemd as PID 1, allowing `service` and `systemctl` commands to work
 - Useful for testing roles that:
   - Enable/disable/start/stop services
@@ -139,7 +167,9 @@ docker build \
 When the container starts (without overriding CMD), systemd will start and manage services:
 
 ```bash
-docker run --rm --privileged \
+docker run --rm \
+  --cgroupns=private \
+  --tmpfs /run --tmpfs /run/lock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   willhallonline/ansible-test:2.21-debian-trixie
 ```
