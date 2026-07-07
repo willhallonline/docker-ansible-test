@@ -26,7 +26,7 @@ A process with those permissions is not meaningfully contained. Well-known, low-
 
 These images are a *test harness* — they are designed to execute whatever playbook or role you point at them, including third-party roles from Ansible Galaxy or a public PR. Treat any role/playbook you haven't audited as untrusted input, the same way you would treat an unreviewed shell script. Combined with elevated container privileges, running unreviewed roles is the highest-risk scenario this project can be used in.
 
-### `--cgroup-fs` / cgroup mounts as an attack surface
+### Cgroup filesystem mounts as an attack surface
 
 Mounting `/sys/fs/cgroup` read-write into the container (required for systemd to manage services) gives the container write access to a cgroup hierarchy. On a properly delegated cgroup v2 subtree (see below) this is safe and is the standard way systemd-in-containers is expected to run. On cgroup v1, a shared/non-delegated mount can allow a container to affect sibling containers or, in the `release_agent` case above, the host.
 
