@@ -135,6 +135,8 @@ Prefer, in order:
    ```
 4. **`--privileged`** — only if none of the above work for your environment (e.g. an old CI runner you don't control). Treat any container run this way as equivalent to host root, and never use it to run untrusted playbooks.
 
+For a fuller discussion of these risks and hardening options, see [SECURITY.md](SECURITY.md).
+
 Use with:
 
 ```bash
@@ -186,5 +188,7 @@ docker exec <container-id> ansible-playbook /ansible/playbook.yml
 - Part of the [docker-ansible](https://github.com/willhallonline/docker-ansible) project family
 
 For contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+For a discussion of the security trade-offs of running systemd-in-containers with this image (including `--privileged` risks and how to report vulnerabilities), see [SECURITY.md](SECURITY.md).
 
 [hub]: https://hub.docker.com/r/willhallonline/ansible-test
