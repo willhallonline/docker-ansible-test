@@ -10,6 +10,8 @@ LABEL maintainer="will@willhallonline.co.uk" \
     org.label-schema.vcs-url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vendor="Will Hall Online"
 
+USER root
+
 RUN dnf -y install systemd systemd-libs dbus && \
     dnf clean all && \
     pip3 install --no-cache-dir \
