@@ -10,6 +10,8 @@ LABEL maintainer="will@willhallonline.co.uk" \
     org.label-schema.vcs-url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vendor="Will Hall Online"
 
+USER root
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         systemd \
