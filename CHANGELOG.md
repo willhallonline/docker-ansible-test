@@ -6,6 +6,15 @@ This project tracks the same versions as [docker-ansible](https://github.com/wil
 
 ## ansible-test Specific Changes
 
+### v2.7.2
+- fix: ensure root user for dockerfile build steps (#21)
+- fix(ci): force root user in workflow smoke test (#19)
+- docs: add SECURITY.md and link from README (#17)
+- docs: prefer cgroup v2 over --privileged for systemd containers (#16)
+- Build ubuntu-24.04 images for linux/amd64 only (#15)
+- Add Dependabot configuration for Docker and GitHub Actions (#6)
+- Various GitHub Actions dependency updates
+
 ### v6.4.1
 - Inherit: Fix collection paths for Ubuntu 26.04 from docker-ansible #166
 - Add ansible-test dependencies for sanity checks (#1)
