@@ -6,6 +6,10 @@ This project tracks the same versions as [docker-ansible](https://github.com/wil
 
 ## ansible-test Specific Changes
 
+### v2.7.4
+- Test the exact image digest produced by each Buildx matrix job instead of a
+  mutable registry tag.
+
 ### v2.7.3
 - Align CI with the current `docker-ansible` build matrix and pinned Ansible
   versions.

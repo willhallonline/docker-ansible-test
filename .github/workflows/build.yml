@@ -195,5 +195,5 @@ jobs:
             --user root \
             --tmpfs /run --tmpfs /run/lock \
             -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-            ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}:${{ matrix.tag-version }}-${{ matrix.os }} \
+            ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}:${{ matrix.tag-version }}-${{ matrix.os }}@${{ steps.build.outputs.digest }} \
             ansible-playbook --version
