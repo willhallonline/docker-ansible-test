@@ -6,6 +6,16 @@ This project tracks the same versions as [docker-ansible](https://github.com/wil
 
 ## ansible-test Specific Changes
 
+### v2.7.3
+- Align CI with the current `docker-ansible` build matrix and pinned Ansible
+  versions.
+- Use the QEMU version required for current Debian Trixie multi-architecture
+  builds.
+- Allow sanity-check dependencies to install on PEP 668-managed Debian bases.
+- Add image health checks for the active systemd variants.
+- Keep Alpine 3.21–3.24 out of this project because Alpine uses OpenRC rather
+  than systemd; Alpine 3.20 is deprecated upstream.
+
 ### v2.7.2
 - fix: ensure root user for dockerfile build steps (#21)
 - fix(ci): force root user in workflow smoke test (#19)

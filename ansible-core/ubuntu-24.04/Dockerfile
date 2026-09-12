@@ -38,4 +38,6 @@ RUN apt-get update && \
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 STOPSIGNAL SIGRTMIN+3
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD [ "ansible", "--version" ]
 CMD ["/lib/systemd/systemd"]
