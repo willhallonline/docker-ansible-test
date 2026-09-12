@@ -10,12 +10,12 @@ Docker images with **systemd** enabled for testing Ansible roles and playbooks i
 
 These are the latest Ansible Core versions running within the containers. **Versions match [docker-ansible](https://github.com/willhallonline/docker-ansible):**
 
-- Ansible 2.16: 2.16.14
+- Ansible 2.16: 2.16.19
 - Ansible 2.17: 2.17.14
-- Ansible 2.18: 2.18.9
-- Ansible 2.19: 2.19.2
-- Ansible 2.20: 2.20.0
-- Ansible 2.21: 2.21.0
+- Ansible 2.18: 2.18.19
+- Ansible 2.19: 2.19.13
+- Ansible 2.20: 2.20.9
+- Ansible 2.21: 2.21.4
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and [docker-ansible CHANGELOG](https://github.com/willhallonline/docker-ansible/blob/main/CHANGELOG.md) for detailed release notes.
 
@@ -30,20 +30,23 @@ These images include:
 - `ansible-lint` (<https://pypi.org/project/ansible-lint/>)
 - **systemd** for service management testing
 
-ARM (ARM64/ARMv7) releases are available for all container images.
+ARM (ARM64/ARMv7) releases are available for all container images except
+Ubuntu 24.04, whose upstream base image currently publishes linux/amd64 only.
 
 | Base Image (↓) \ Ansible Version (→) | Dockerfile                                                                                                               | 2.21                          | 2.20                          | 2.19                          | 2.18                          | 2.17                          | 2.16                          |
 |--------------------------------------|--------------------------------------------------------------------------------------------------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|
-| Bookworm (Debian 12)                 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/debian-bookworm/Dockerfile)      |                           | | `2.19-debian-bookworm` | `2.18-debian-bookworm` | `2.17-debian-bookworm` | `2.16-debian-bookworm` |
-| Bookworm Slim (Debian 12)            | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/debian-bookworm-slim/Dockerfile) |                           | | `2.19-debian-bookworm-slim` | `2.18-debian-bookworm-slim` | `2.17-debian-bookworm-slim` | `2.16-debian-bookworm-slim` |
-| Trixie (Debian 13)                   | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/debian-trixie/Dockerfile)        | `latest`, `2.21-debian-trixie` | `2.20-debian-trixie` | `2.19-debian-trixie` | `2.18-debian-trixie` | `2.17-debian-trixie` | |
-| Trixie Slim (Debian 13)              | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/debian-trixie-slim/Dockerfile)   | `2.21-debian-trixie-slim` | `2.20-debian-trixie-slim` | `2.19-debian-trixie-slim` | `2.18-debian-trixie-slim` | `2.17-debian-trixie-slim` | |
-| Rocky Linux 10                       | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/rockylinux-10/Dockerfile)        | `2.21-rockylinux-10` | `2.20-rockylinux-10` | `2.19-rockylinux-10` | `2.18-rockylinux-10` | `2.17-rockylinux-10` | `2.16-rockylinux-10` |
-| Ubuntu 22.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/ubuntu-22.04/Dockerfile)         | | | | | `2.17-ubuntu-22.04` | `2.16-ubuntu-22.04` |
-| Ubuntu 24.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/ubuntu-24.04/Dockerfile)         | `2.21-ubuntu-24.04` | `2.20-ubuntu-24.04` | `2.19-ubuntu-24.04` | `2.18-ubuntu-24.04` | `2.17-ubuntu-24.04` | `2.16-ubuntu-24.04` |
-| Ubuntu 26.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/master/ansible-core/ubuntu-26.04/Dockerfile)         | `2.21-ubuntu-26.04` | `2.20-ubuntu-26.04` | | | | |
+| Bookworm (Debian 12)                 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm/Dockerfile)      |                           | | `2.19-debian-bookworm` | `2.18-debian-bookworm` | `2.17-debian-bookworm` | `2.16-debian-bookworm` |
+| Bookworm Slim (Debian 12)            | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm-slim/Dockerfile) |                           | | `2.19-debian-bookworm-slim` | `2.18-debian-bookworm-slim` | `2.17-debian-bookworm-slim` | `2.16-debian-bookworm-slim` |
+| Trixie (Debian 13)                   | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie/Dockerfile)        | `latest`, `2.21-debian-trixie` | `2.20-debian-trixie` | `2.19-debian-trixie` | `2.18-debian-trixie` | `2.17-debian-trixie` | |
+| Trixie Slim (Debian 13)              | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie-slim/Dockerfile)   | `2.21-debian-trixie-slim` | `2.20-debian-trixie-slim` | `2.19-debian-trixie-slim` | `2.18-debian-trixie-slim` | `2.17-debian-trixie-slim` | |
+| Rocky Linux 10                       | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/rockylinux-10/Dockerfile)        | `2.21-rockylinux-10` | `2.20-rockylinux-10` | `2.19-rockylinux-10` | `2.18-rockylinux-10` | `2.17-rockylinux-10` | `2.16-rockylinux-10` |
+| Ubuntu 22.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-22.04/Dockerfile)         | | | | | `2.17-ubuntu-22.04` | `2.16-ubuntu-22.04` |
+| Ubuntu 24.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-24.04/Dockerfile)         | `2.21-ubuntu-24.04` | `2.20-ubuntu-24.04` | `2.19-ubuntu-24.04` | `2.18-ubuntu-24.04` | `2.17-ubuntu-24.04` | `2.16-ubuntu-24.04` |
+| Ubuntu 26.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-26.04/Dockerfile)         | `2.21-ubuntu-26.04` | `2.20-ubuntu-26.04` | | | | |
 
 > **Note:** Alpine images are not provided as Alpine uses OpenRC, not systemd.
+Alpine 3.20 has been deprecated by the base project; Alpine 3.21–3.24 are
+available there but remain intentionally excluded from these systemd images.
 
 ## Running
 

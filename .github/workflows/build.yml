@@ -3,13 +3,13 @@ name: Ansible Test Matrix Build
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'ansible-core/**/Dockerfile'
       - '.github/workflows/build.yml'
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'ansible-core/**/Dockerfile'
       - '.github/workflows/build.yml'
@@ -139,6 +139,8 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
+        with:
+          image: tonistiigi/binfmt:qemu-v9.2.2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -162,7 +164,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v6
+        uses: docker/metadata-action@v6.2.0
         with:
           images: |
             ${{ env.DOCKERHUB_NAMESPACE }}/${{ env.DOCKERHUB_REPOSITORY }}
@@ -173,7 +175,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@v7.3.0
         with:
           context: ./ansible-core/${{ matrix.os }}
           platforms: ${{ matrix.platforms || 'linux/amd64,linux/arm64' }}
