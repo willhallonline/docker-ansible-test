@@ -5,7 +5,7 @@ FROM willhallonline/ansible:${ANSIBLE_TAG}
 LABEL maintainer="will@willhallonline.co.uk" \
     org.label-schema.schema-version="1.0" \
     org.label-schema.name="willhallonline/ansible-test" \
-    org.label-schema.description="Ansible testing inside Docker" \
+    org.label-schema.description="Docker Ansible Test images for testing Ansible roles and playbooks" \
     org.label-schema.url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vcs-url="https://github.com/willhallonline/docker-ansible-test" \
     org.label-schema.vendor="Will Hall Online"

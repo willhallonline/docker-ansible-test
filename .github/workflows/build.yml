@@ -1,4 +1,4 @@
-name: Ansible Test Matrix Build
+name: Docker Ansible Test Matrix Build
 
 on:
   push:
