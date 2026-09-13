@@ -1,4 +1,4 @@
-# Contributing to Ansible Testing Docker Container Project
+# Contributing to Docker Ansible Test
 
 Thank you for considering contributing to the project! I appreciate your time and effort and value your input. The aims of this file are to try to make it easier to contribute and I am happy to try and support contributions. Please bear in mind that the overall aims are to support testing of Ansible roles and playbooks across different OS versions and architectures.
 
