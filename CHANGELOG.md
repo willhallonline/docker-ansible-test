@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.4.9
+
+- Remove end-of-life `ansible-core` 2.16 and 2.17 from active image builds and
+  documentation, aligning with docker-ansible v6.4.9.
+
 ## Version Alignment
 
 This project tracks the same versions as [docker-ansible](https://github.com/willhallonline/docker-ansible). See that project's [CHANGELOG](https://github.com/willhallonline/docker-ansible/blob/main/CHANGELOG.md) for detailed version history.
