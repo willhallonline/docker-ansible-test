@@ -30,7 +30,7 @@ These images include:
 - `ansible-lint` (<https://pypi.org/project/ansible-lint/>)
 - **systemd** for service management testing
 
-ARM (ARM64/ARMv7) releases are available for all container images except
+ARM64 releases are available for all container images except
 Ubuntu 24.04, whose upstream base image currently publishes linux/amd64 only.
 
 | Base Image (↓) \ Ansible Version (→) | Dockerfile                                                                                                               | 2.21                          | 2.20                          | 2.19                          | 2.18                          |
