@@ -11,6 +11,10 @@ This project tracks the same versions as [docker-ansible](https://github.com/wil
 
 ## ansible-test Specific Changes
 
+### v2.7.5
+- Align documented `ansible-core` patch versions with docker-ansible v6.4.12.
+- Update `docker/build-push-action` to v7.4.0.
+
 ### v2.7.4
 - Test the exact image digest produced by each Buildx matrix job instead of a
   mutable registry tag.

@@ -12,10 +12,10 @@ See the [docker-ansible documentation](https://docker-ansible.github.io/) to mak
 
 These are the latest Ansible Core versions running within the containers. **Versions match [docker-ansible](https://github.com/willhallonline/docker-ansible):**
 
-- Ansible 2.18: 2.18.19
-- Ansible 2.19: 2.19.13
-- Ansible 2.20: 2.20.9
-- Ansible 2.21: 2.21.4
+- Ansible 2.18: 2.18.20
+- Ansible 2.19: 2.19.15
+- Ansible 2.20: 2.20.11
+- Ansible 2.21: 2.21.6
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and [docker-ansible CHANGELOG](https://github.com/willhallonline/docker-ansible/blob/main/CHANGELOG.md) for detailed release notes.
 
