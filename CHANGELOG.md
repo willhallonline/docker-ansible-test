@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.4.12
+
+- Align documented `ansible-core` patch versions with docker-ansible v6.4.12.
+- Update `docker/build-push-action` to v7.4.0.
+
 ## v6.4.9
 
 - Remove end-of-life `ansible-core` 2.16 and 2.17 from active image builds and
