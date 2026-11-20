@@ -2,7 +2,7 @@
 
 Docker images with **systemd** enabled for testing Ansible roles and playbooks inside containers. These images extend [willhallonline/ansible](https://github.com/willhallonline/docker-ansible) with systemd support, making them ideal for CI/CD testing of roles that manage services or interact with the init system.
 
-**Version Alignment:** ansible-test versions track [docker-ansible](https://github.com/willhallonline/docker-ansible) releases. Both projects support the same Ansible Core versions (2.18–2.21) and base OS combinations.
+**Version Alignment:** ansible-test versions track [docker-ansible](https://github.com/willhallonline/docker-ansible) releases. This project supports the same systemd-compatible base OS combinations for Ansible Core versions 2.18–2.22.
 
 See the [docker-ansible documentation](https://docker-ansible.github.io/) to make this project easier to use, extend, and contribute to.
 
@@ -16,12 +16,13 @@ These are the latest Ansible Core versions running within the containers. **Vers
 - Ansible 2.19: 2.19.15
 - Ansible 2.20: 2.20.11
 - Ansible 2.21: 2.21.6
+- Ansible 2.22: 2.22.0
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and [docker-ansible CHANGELOG](https://github.com/willhallonline/docker-ansible/blob/main/CHANGELOG.md) for detailed release notes.
 
 ## Supported tags and respective `Dockerfile` links
 
-### Ansible Core (2.18, 2.19, 2.20, 2.21)
+### Ansible Core (2.18, 2.19, 2.20, 2.21, 2.22)
 
 These images include:
 
@@ -33,15 +34,18 @@ These images include:
 ARM64 releases are available for all container images except
 Ubuntu 24.04, whose upstream base image currently publishes linux/amd64 only.
 
-| Base Image (↓) \ Ansible Version (→) | Dockerfile                                                                                                               | 2.21                          | 2.20                          | 2.19                          | 2.18                          |
-|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------|-------------------------------|-------------------------------|-------------------------------|-------------------------------|
-| Bookworm (Debian 12)                 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm/Dockerfile)      |                           | | `2.19-debian-bookworm` | `2.18-debian-bookworm` |
-| Bookworm Slim (Debian 12)            | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm-slim/Dockerfile) |                           | | `2.19-debian-bookworm-slim` | `2.18-debian-bookworm-slim` |
-| Trixie (Debian 13)                   | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie/Dockerfile)        | `latest`, `2.21-debian-trixie` | `2.20-debian-trixie` | `2.19-debian-trixie` | `2.18-debian-trixie` |
-| Trixie Slim (Debian 13)              | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie-slim/Dockerfile)   | `2.21-debian-trixie-slim` | `2.20-debian-trixie-slim` | `2.19-debian-trixie-slim` | `2.18-debian-trixie-slim` |
-| Rocky Linux 10                       | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/rockylinux-10/Dockerfile)        | `2.21-rockylinux-10` | `2.20-rockylinux-10` | `2.19-rockylinux-10` | `2.18-rockylinux-10` |
-| Ubuntu 24.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-24.04/Dockerfile)         | `2.21-ubuntu-24.04` | `2.20-ubuntu-24.04` | `2.19-ubuntu-24.04` | `2.18-ubuntu-24.04` |
-| Ubuntu 26.04                         | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-26.04/Dockerfile)         | `2.21-ubuntu-26.04` | `2.20-ubuntu-26.04` | | |
+Ansible Core 2.22 requires Python 3.13 or newer, so its test images are
+limited to Debian Trixie, Debian Trixie Slim, and Ubuntu 26.04.
+
+| Base Image (↓) \ Ansible Version (→) | Dockerfile                                                                                                               | 2.22 | 2.21 | 2.20 | 2.19 | 2.18 |
+|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------|------|------|------|------|------|
+| Bookworm (Debian 12) | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm/Dockerfile) | | | | `2.19-debian-bookworm` | `2.18-debian-bookworm` |
+| Bookworm Slim (Debian 12) | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-bookworm-slim/Dockerfile) | | | | `2.19-debian-bookworm-slim` | `2.18-debian-bookworm-slim` |
+| Trixie (Debian 13) | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie/Dockerfile) | `latest`, `2.22-debian-trixie` | `2.21-debian-trixie` | `2.20-debian-trixie` | `2.19-debian-trixie` | `2.18-debian-trixie` |
+| Trixie Slim (Debian 13) | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/debian-trixie-slim/Dockerfile) | `2.22-debian-trixie-slim` | `2.21-debian-trixie-slim` | `2.20-debian-trixie-slim` | `2.19-debian-trixie-slim` | `2.18-debian-trixie-slim` |
+| Rocky Linux 10 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/rockylinux-10/Dockerfile) | | `2.21-rockylinux-10` | `2.20-rockylinux-10` | `2.19-rockylinux-10` | `2.18-rockylinux-10` |
+| Ubuntu 24.04 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-24.04/Dockerfile) | | `2.21-ubuntu-24.04` | `2.20-ubuntu-24.04` | `2.19-ubuntu-24.04` | `2.18-ubuntu-24.04` |
+| Ubuntu 26.04 | [Dockerfile](https://github.com/willhallonline/docker-ansible-test/blob/main/ansible-core/ubuntu-26.04/Dockerfile) | `2.22-ubuntu-26.04` | `2.21-ubuntu-26.04` | `2.20-ubuntu-26.04` | | |
 
 ### Older versions (2.16, 2.17)
 
@@ -75,7 +79,7 @@ docker run --rm \
   --tmpfs /run --tmpfs /run/lock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
   -v $(pwd):/ansible \
-  willhallonline/ansible-test:2.21-debian-trixie \
+  willhallonline/ansible-test:2.22-debian-trixie \
   ansible-playbook /ansible/playbook.yml
 ```
 
@@ -103,7 +107,7 @@ provisioner:
 
 platforms:
   - name: instance
-    image: willhallonline/ansible-test:2.21-debian-trixie
+    image: willhallonline/ansible-test:2.22-debian-trixie
     pre_build_image: true
     cgroupns_mode: private
     volumes:
@@ -156,8 +160,8 @@ docker-ansible-test-play /ansible/playbook.yml
 
 ```bash
 docker build \
-  --build-arg ANSIBLE_TAG=2.21-debian-trixie \
-  -t ansible-test:2.21-debian-trixie \
+  --build-arg ANSIBLE_TAG=2.22-debian-trixie \
+  -t ansible-test:2.22-debian-trixie \
   ansible-core/debian-trixie/
 ```
 
@@ -181,7 +185,7 @@ docker run --rm \
   --cgroupns=private \
   --tmpfs /run --tmpfs /run/lock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-  willhallonline/ansible-test:2.21-debian-trixie
+  willhallonline/ansible-test:2.22-debian-trixie
 ```
 
 You can then use `docker exec` to run ansible commands against the running container:
