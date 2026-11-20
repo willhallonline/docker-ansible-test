@@ -35,6 +35,10 @@ If you have an idea to improve the project, submit a feature request in the [Iss
 4. **Make Changes**: Develop your feature or fix in your local repository.
    - Changes to Dockerfiles should maintain consistency across all OS bases
    - Test locally: `docker build --build-arg ANSIBLE_TAG=2.22-debian-trixie -t test:local ansible-core/debian-trixie/`
+   - Before changing the supported matrix, align the Dockerfiles, the matrix in
+     `.github/workflows/build.yml`, the README support table, and this repository's
+     changelog with the parent [docker-ansible](https://github.com/willhallonline/docker-ansible)
+     matrix.
 
 5. **Commit Changes**:
 
@@ -56,8 +60,14 @@ If you have an idea to improve the project, submit a feature request in the [Iss
 - **Follow Best Practices**: Ensure your code follows best practices for Dockerfiles.
 - **Testing**: Thoroughly test your changes locally:
   - Build the image: `docker build --build-arg ANSIBLE_TAG=<version>-<os> -t test:local ansible-core/<os>/`
-  - Run sanity checks: `docker run --rm test:local python3 -m pycodestyle --version`
-  - Test with ansible-test: `docker run --rm -v /path/to/collection:/opt/code test:local ansible-test sanity`
+  - Run the CI smoke check:
+    `docker run --rm --cgroupns=private --user root --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:rw test:local ansible-playbook --version`
+  - Run collection sanity checks only from a collection project:
+    `docker run --rm -v /path/to/collection:/opt/code test:local ansible-test sanity`
+- **CI Scope**: Pull requests build the matrix as `linux/amd64` and run the
+  smoke check above. Pushes and scheduled builds also publish supported images
+  from repository-owned branches. The workflow is triggered by Dockerfile or
+  workflow changes, not by documentation-only changes.
 - **Documentation**: Update the README.md or CHANGELOG.md if your changes affect users.
 - **Consistency**: Keep changes aligned with the parent [docker-ansible](https://github.com/willhallonline/docker-ansible) project structure.
 

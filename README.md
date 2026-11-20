@@ -53,6 +53,11 @@ Ansible Core 2.16 and 2.17 are end-of-life and no longer receive new image
 builds. Existing immutable tags may remain available according to the image
 retention policy.
 
+The Ubuntu 22.04 Dockerfile is retained in the repository for reference and
+maintenance tooling, but Ubuntu 22.04 is not in the active build matrix and
+does not publish active 2.18–2.22 test images. This follows the parent
+docker-ansible project, whose active matrix also excludes Ubuntu 22.04.
+
 > **Note:** Alpine images are not provided as Alpine uses OpenRC, not systemd.
 Alpine 3.20 has been deprecated by the base project; Alpine 3.21–3.24 are
 available there but remain intentionally excluded from these systemd images.

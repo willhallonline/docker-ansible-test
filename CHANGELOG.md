@@ -18,6 +18,12 @@ This project tracks the same versions as [docker-ansible](https://github.com/wil
 
 ## ansible-test Specific Changes
 
+### v2.7.6
+- Clarify that Ubuntu 22.04 remains a retained Dockerfile rather than an active
+  2.18–2.22 test-image target.
+- Document the repository's CI smoke-test command and matrix-alignment process
+  for contributors.
+
 ### v2.7.5
 - Align documented `ansible-core` patch versions with docker-ansible v6.4.12.
 - Update `docker/build-push-action` to v7.4.0.
