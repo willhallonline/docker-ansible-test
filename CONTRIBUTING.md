@@ -34,7 +34,7 @@ If you have an idea to improve the project, submit a feature request in the [Iss
 
 4. **Make Changes**: Develop your feature or fix in your local repository.
    - Changes to Dockerfiles should maintain consistency across all OS bases
-   - Test locally: `docker build --build-arg ANSIBLE_TAG=2.21-debian-trixie -t test:local ansible-core/debian-trixie/`
+   - Test locally: `docker build --build-arg ANSIBLE_TAG=2.22-debian-trixie -t test:local ansible-core/debian-trixie/`
 
 5. **Commit Changes**:
 

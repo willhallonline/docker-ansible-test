@@ -1,5 +1,12 @@
 # Changelog
 
+## v6.5.0
+
+- Add `ansible-core` 2.22.0 images for Debian Trixie, Debian Trixie Slim, and
+  Ubuntu 26.04, aligning with docker-ansible v6.5.0.
+- Advance the `latest` tag to the Ansible Core 2.22 Debian Trixie image.
+- Run image smoke tests on pull requests as well as published images.
+
 ## v6.4.9
 
 - Remove end-of-life `ansible-core` 2.16 and 2.17 from active image builds and

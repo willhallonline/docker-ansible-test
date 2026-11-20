@@ -61,6 +61,8 @@ jobs:
             tag-version: "2.20"
           - os: debian-trixie
             tag-version: "2.21"
+          - os: debian-trixie
+            tag-version: "2.22"
 
           # Debian Trixie Slim
           - os: debian-trixie-slim
@@ -71,6 +73,8 @@ jobs:
             tag-version: "2.20"
           - os: debian-trixie-slim
             tag-version: "2.21"
+          - os: debian-trixie-slim
+            tag-version: "2.22"
 
           # Rocky Linux 10
           - os: rockylinux-10
@@ -106,6 +110,8 @@ jobs:
             tag-version: "2.20"
           - os: ubuntu-26.04
             tag-version: "2.21"
+          - os: ubuntu-26.04
+            tag-version: "2.22"
 
     steps:
       - name: Checkout
@@ -145,14 +151,15 @@ jobs:
             ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}
           tags: |
             type=raw,enable=true,value=${{ matrix.tag-version }}-${{ matrix.os }}
-            ${{ matrix.os == 'debian-trixie' && matrix.tag-version == '2.21' && 'type=raw,enable=true,value=latest' || '' }}
+            ${{ matrix.os == 'debian-trixie' && matrix.tag-version == '2.22' && 'type=raw,enable=true,value=latest' || '' }}
 
       - name: Build and push Docker image
         id: build
         uses: docker/build-push-action@v7.4.0
         with:
           context: ./ansible-core/${{ matrix.os }}
-          platforms: ${{ matrix.platforms || 'linux/amd64,linux/arm64' }}
+          platforms: ${{ github.event_name == 'pull_request' && 'linux/amd64' || matrix.platforms || 'linux/amd64,linux/arm64' }}
+          load: ${{ github.event_name == 'pull_request' }}
           push: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -161,13 +168,22 @@ jobs:
             ANSIBLE_TAG=${{ matrix.tag-version }}-${{ matrix.os }}
 
       - name: Test docker image
-        if: ${{ github.event_name != 'pull_request' && github.repository == 'willhallonline/docker-ansible-test' && steps.build.outputs.digest }}
+        if: ${{ github.event_name == 'pull_request' || github.repository == 'willhallonline/docker-ansible-test' }}
         shell: bash
+        env:
+          IMAGE_TAG: ${{ matrix.tag-version }}-${{ matrix.os }}
+          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
         run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            image_ref="${DOCKERHUB_NAMESPACE}/${DOCKERHUB_REPOSITORY}:${IMAGE_TAG}"
+          else
+            image_ref="${GITHUB_REGISTRY}/${GITHUB_REGISTRY_REPOSITORY}:${IMAGE_TAG}@${IMAGE_DIGEST}"
+          fi
+
           docker run --rm \
             --cgroupns=private \
             --user root \
             --tmpfs /run --tmpfs /run/lock \
             -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-            ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REGISTRY_REPOSITORY }}:${{ matrix.tag-version }}-${{ matrix.os }}@${{ steps.build.outputs.digest }} \
+            "${image_ref}" \
             ansible-playbook --version
